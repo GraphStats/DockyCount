@@ -13,7 +13,7 @@
             --accent-color: #4d8bf0;
             --border-color: #333333;
         }
-        
+
         body {
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             background-color: var(--bg-primary);
@@ -25,7 +25,7 @@
             min-height: 100vh;
             line-height: 1.6;
         }
-        
+
         .container {
             max-width: 800px;
             margin: 0 auto;
@@ -35,19 +35,19 @@
             flex-direction: column;
             justify-content: center;
         }
-        
+
         .maintenance-header {
             text-align: center;
             margin-bottom: 2.5rem;
         }
-        
+
         h1 {
             font-size: 2.5rem;
             margin-bottom: 1rem;
             font-weight: 600;
             color: var(--text-primary);
         }
-        
+
         .status-code {
             font-size: 5rem;
             font-weight: 700;
@@ -55,7 +55,7 @@
             margin: 1rem 0;
             position: relative;
         }
-        
+
         .status-code::after {
             content: '';
             position: absolute;
@@ -67,13 +67,13 @@
             background: var(--accent-color);
             border-radius: 2px;
         }
-        
+
         p {
             color: var(--text-secondary);
             font-size: 1.1rem;
             margin: 0.5rem 0;
         }
-        
+
         .progress-container {
             width: 100%;
             background-color: var(--bg-secondary);
@@ -82,21 +82,15 @@
             overflow: hidden;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
         }
-        
+
         .progress-bar {
             height: 8px;
             background-color: var(--accent-color);
             border-radius: 8px;
-            width: 65%;
-            animation: progress-pulse 2.5s ease-in-out infinite;
+            width: 0%;
+            transition: width 1s linear;
         }
-        
-        @keyframes progress-pulse {
-            0% { opacity: 0.9; }
-            50% { opacity: 0.6; }
-            100% { opacity: 0.9; }
-        }
-        
+
         .details {
             background-color: var(--bg-secondary);
             border-radius: 8px;
@@ -104,36 +98,36 @@
             margin-top: 2rem;
             border: 1px solid var(--border-color);
         }
-        
+
         .detail-item {
             display: flex;
             margin-bottom: 1rem;
         }
-        
+
         .detail-icon {
             margin-right: 1rem;
             color: var(--accent-color);
         }
-        
+
         .footer {
             text-align: center;
             margin-top: 3rem;
             color: var(--text-secondary);
             font-size: 0.9rem;
         }
-        
+
         .gear-icon {
             display: inline-block;
             animation: spin 8s linear infinite;
             margin: 0 0.5rem;
             font-size: 1.2rem;
         }
-        
+
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        
+
         .floating-elements {
             position: fixed;
             top: 0;
@@ -144,14 +138,14 @@
             z-index: -1;
             opacity: 0.1;
         }
-        
+
         .floating-element {
             position: absolute;
             background-color: var(--accent-color);
             border-radius: 50%;
             animation: float 15s linear infinite;
         }
-        
+
         @keyframes float {
             0% { transform: translateY(0) translateX(0); opacity: 0; }
             10% { opacity: 0.3; }
@@ -179,7 +173,7 @@
                 <div class="detail-icon">⏱️</div>
                 <div>
                     <strong>Estimated completion:</strong><br>
-                    August 14, 2025 - 02:00 UTC
+                    August 15, 2025 14:00 - UTC +2
                 </div>
             </div>
             <div class="detail-item">
@@ -197,7 +191,7 @@
     </div>
     
     <script>
-        // Create floating elements
+        // Création des éléments flottants
         const floatingElements = document.getElementById('floatingElements');
         const colors = ['#4d8bf0', '#6c5ce7', '#00b894', '#fd79a8'];
         
@@ -205,7 +199,6 @@
             const element = document.createElement('div');
             element.classList.add('floating-element');
             
-            // Random properties
             const size = Math.random() * 20 + 5;
             const delay = Math.random() * 15;
             const duration = Math.random() * 10 + 10;
@@ -221,6 +214,26 @@
             
             floatingElements.appendChild(element);
         }
+
+        // Barre de progression dynamique vers une date spécifique
+        const progressBar = document.querySelector('.progress-bar');
+        const startDate = new Date(); // maintenant
+        const endDate = new Date('2025-08-15T14:00:00Z'); // date finale
+
+        function updateProgress() {
+            const now = new Date();
+            const totalTime = endDate - startDate;
+            const elapsedTime = now - startDate;
+            
+            let progress = (elapsedTime / totalTime) * 100;
+            if (progress > 100) progress = 100;
+            if (progress < 0) progress = 0;
+
+            progressBar.style.width = progress + '%';
+        }
+
+        updateProgress(); // update immédiat
+        setInterval(updateProgress, 1000); // update toutes les secondes
     </script>
 </body>
 </html>
