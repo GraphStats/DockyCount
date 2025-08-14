@@ -167,6 +167,7 @@
         <div class="progress-container">
             <div class="progress-bar"></div>
         </div>
+        <div id="remaining-time" style="text-align:center; font-size:1.1rem; color:var(--accent-color); margin-bottom:1.5rem;"></div>
         
         <div class="details">
             <div class="detail-item">
@@ -217,20 +218,38 @@
 
         // Barre de progression dynamique avec date de début et date de fin
         const progressBar = document.querySelector('.progress-bar');
+        const remainingTimeDiv = document.getElementById('remaining-time');
 
         const startDate = new Date('2025-08-11T12:45:00Z'); // début maintenance
         const endDate = new Date('2025-08-15T14:00:00Z');   // fin maintenance
+
+        function formatRemaining(ms) {
+            if (ms <= 0) return "Maintenance terminée";
+            const totalSeconds = Math.floor(ms / 1000);
+            const days = Math.floor(totalSeconds / 86400);
+            const hours = Math.floor((totalSeconds % 86400) / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const seconds = totalSeconds % 60;
+            let str = "Temps restant : ";
+            if (days > 0) str += days + "j ";
+            if (hours > 0 || days > 0) str += hours + "h ";
+            if (minutes > 0 || hours > 0 || days > 0) str += minutes + "m ";
+            str += seconds + "s";
+            return str;
+        }
 
         function updateProgress() {
             const now = new Date();
             const totalTime = endDate - startDate;
             const elapsedTime = now - startDate;
-
             let progress = (elapsedTime / totalTime) * 100;
             if (progress > 100) progress = 100;
             if (progress < 0) progress = 0;
-
             progressBar.style.width = progress + '%';
+
+            // Affichage du temps restant
+            const remaining = endDate - now;
+            remainingTimeDiv.textContent = formatRemaining(remaining);
         }
 
         updateProgress(); // update immédiat
