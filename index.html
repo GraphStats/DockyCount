@@ -173,7 +173,7 @@
                 <div class="detail-icon">⏱️</div>
                 <div>
                     <strong>Estimated completion:</strong><br>
-                    August 15, 2025 14:00 - UTC +2
+                    August 15, 2025 14:00 - UTC +1
                 </div>
             </div>
             <div class="detail-item">
@@ -215,16 +215,17 @@
             floatingElements.appendChild(element);
         }
 
-        // Barre de progression dynamique vers une date spécifique
+        // Barre de progression dynamique avec date de début et date de fin
         const progressBar = document.querySelector('.progress-bar');
-        const startDate = new Date(); // maintenant
-        const endDate = new Date('2025-08-15T14:00:00Z'); // date finale
+
+        const startDate = new Date('2025-08-11T12:45:00Z'); // début maintenance
+        const endDate = new Date('2025-08-15T14:00:00Z');   // fin maintenance
 
         function updateProgress() {
             const now = new Date();
             const totalTime = endDate - startDate;
             const elapsedTime = now - startDate;
-            
+
             let progress = (elapsedTime / totalTime) * 100;
             if (progress > 100) progress = 100;
             if (progress < 0) progress = 0;
