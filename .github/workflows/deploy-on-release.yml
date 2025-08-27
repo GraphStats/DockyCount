@@ -1,0 +1,11 @@
+name: Deploy on Release
+on:
+  release:
+    types: [published]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call Vercel Deploy Hook
+        run: curl -X POST "https://api.vercel.com/v1/integrations/deploy/prj_CG8cLwAWxg1aPQp1w0aT555rk0vi/8JDYwsgbaU"
