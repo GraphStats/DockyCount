@@ -682,10 +682,13 @@
     <section class="search-section fade-in" id="main-search-section">
       <div class="search-container">
         <input type="text" class="search-input" id="channel-input" placeholder="Enter YouTube channel name or URL" onkeypress="handleKeyPress(event)">
+          <div class="cf-turnstile" data-sitekey="0x4AAAAAABvEhLhof1p8gqOH"></div>
         <button class="search-btn" onclick="fetchChannelData()">
           <span id="search-text">Search</span>
           <div class="loader" id="loader"></div>
         </button>
+        <!-- Script Turnstile à ajouter juste avant </body> -->
+        <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
         <!-- Nouveau bouton Compare -->
         <button class="search-btn" id="show-compare-search-btn" onclick="showCompareSearchBar()" style="margin-left:8px;">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15l-6-6-6 6"></path><path d="M21 9l-6 6-6-6"></path></svg>
@@ -869,6 +872,19 @@
       compareChannelsContainer: document.getElementById("compare-channels")
     };
     
+
+    async function verify() {
+     const token = document.querySelector('.cf-turnstile iframe').contentWindow.turnstileToken; // simplifié
+     const res = await fetch('/api/turnstile-verify', {
+     method: 'POST',
+     headers: { 'Content-Type': 'application/json' },
+     body: JSON.stringify({ token })
+    });
+    const data = await res.json();
+    console.log(data);
+    if(data.success) alert("Captcha passed!");
+    }
+
     // Initialize the application
     function init() {
       setupEventListeners();
