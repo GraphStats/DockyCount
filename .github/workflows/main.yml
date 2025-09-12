@@ -2,7 +2,7 @@ name: Fetch MrBeast Subs
 
 on:
   schedule:
-    - cron: "*/30 * * * *"
+    - cron: "0 2,6,10,14,18 * * *"
   workflow_dispatch:
 
 permissions:
