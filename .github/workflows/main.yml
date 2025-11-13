@@ -72,3 +72,4 @@ jobs:
         body: "Automated release for ${{ env.new_version }}"
         draft: false
         prerelease: false
+        makeLatest: true
