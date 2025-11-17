@@ -1,0 +1,50 @@
+name: Fetch MrBeast Subs
+
+on:
+  schedule:
+    - cron: "*/5 * * * *" # toutes les 5 minutes
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fetch_subs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Decide if run
+        id: decide
+        run: |
+          # 15% de chance d'exécuter
+          if [ $(( RANDOM % 100 )) -lt 16 ]; then
+            echo "run=true" >> $GITHUB_OUTPUT
+            echo "✅ Run (15% chance)"
+          else
+            echo "run=false" >> $GITHUB_OUTPUT
+            echo "❌ Skip (85% chance)"
+          fi
+
+      - name: Checkout beta branch
+        if: steps.decide.outputs.run == 'true'
+        uses: actions/checkout@v4
+        with:
+          ref: beta
+          token: ${{ secrets.MY_PERSONAL_TOKEN }}
+
+      - name: Fetch subscriber count
+        if: steps.decide.outputs.run == 'true'
+        run: |
+          curl -s https://backend.mixerno.space/api/youtube/estv3/UCX6OQ3DkcsbYNE6H8uQQuVA \
+          | jq '{subscriberCount: .items[0].statistics.subscriberCount}' > mrbeast.json
+
+      - name: Commit and push to beta
+        if: steps.decide.outputs.run == 'true'
+        run: |
+          git config user.name "GraphStats"
+          git config user.email "189259481+GraphStats@users.noreply.github.com"
+          git add mrbeast.json
+          git commit -m "Update subscriber count [skip ci]" || echo "No changes to commit"
+          git push origin beta
+        env:
+          GITHUB_TOKEN: ${{ secrets.MY_PERSONAL_TOKEN }}
